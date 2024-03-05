@@ -1,6 +1,5 @@
 package accounts;
 
-import java.math.BigDecimal;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
@@ -18,6 +17,8 @@ public class Account {
     }
     public void setClientName(String clientName) {
         if(clientName==null||clientName.isEmpty()) throw new IllegalArgumentException("пустой clientName");
+        String undoClientName=this.clientName;
+        this.commands.push(()->{this.clientName=undoClientName;});  //команда для отката clientName
         this.clientName = clientName;
     }
 
@@ -27,9 +28,14 @@ public class Account {
 
     public void setWallet(Currency currency, int number) {
         if(number<0) throw new IllegalArgumentException("количество не может быть отрицательным");
+        //откат валета
         if(wallet.containsKey(currency)){
-            this.commands.push(()->{this.wallet.put(currency,number);});
+            //если есть такой ключ, то откатываем само значение
+            int undoNumber=this.wallet.get(currency);   //текущее значение
+            //System.out.println(undoNumber);
+            this.commands.push(()->{this.wallet.put(currency,undoNumber);});
         } else{
+            //иначе - завели новый ключ - убиваем всю пару
             this.commands.push(()->{this.wallet.remove(currency);});
         }
         this.wallet.put(currency,number);
@@ -43,16 +49,25 @@ public class Account {
     private Account() {
     }
 
+    public Account undo() throws NothingToUndo {
+        if(commands.isEmpty()) throw new NothingToUndo("буффер отката пуст");
+        commands.pop().perform();
+        return this;
+    }
+
+    //--------------вывод на экран-------------------
+
     @Override
     public String toString() {
-        return "clientName='" + clientName;
+        return "clientName = " + clientName;
     }
 
     public void printWallet(){
+        //хочу выводить пару валюта - число
         for(Currency cur : this.wallet.keySet()){
-            System.out.println(cur.toString()+" "+this.wallet.get(cur).toString());
+            System.out.println(cur.toString()+" : "+this.wallet.get(cur).toString());
         }
-        //this.wallet.values().stream().forEach(System.out::println);
+        //this.wallet.values().stream().forEach(System.out::println);   //прикольно, на память
     }
 
 }
