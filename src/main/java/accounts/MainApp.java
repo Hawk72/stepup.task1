@@ -22,5 +22,21 @@ public class MainApp {
         acc.undo();
         System.out.println(acc);
         acc.printWallet();
+        System.out.println("---------bfr snapshot--------");
+        acc.setWallet(Currency.RUB,150);
+        acc.setWallet(Currency.USD,66);
+        System.out.println(acc);
+        acc.printWallet();
+        Loadable qs= acc.save();
+        System.out.println("---------replace data--------");
+        acc.setClientName("Инокентий Пупкин");
+        acc.setWallet(Currency.RUB,222);
+        acc.setWallet(Currency.USD,77);
+        System.out.println(acc);
+        acc.printWallet();
+        System.out.println("---------load snapshot--------");
+        qs.load();
+        System.out.println(acc);
+        acc.printWallet();
     }
 }
