@@ -3,9 +3,6 @@ package accounts;
 import java.math.BigDecimal;
 import java.util.HashMap;
 
-/**
- * Счет
- */
 abstract class Account {
 
     private String clientName;
@@ -13,14 +10,9 @@ abstract class Account {
     private Currency currency;
     private HashMap<Currency, Integer> wallet;
 
-    public Account(String clientName) {
-        this.clientName = clientName;
-    }
-
     public String getClientName() {
         return clientName;
     }
-
     public void setClientName(String clientName) {
         this.clientName = clientName;
     }
@@ -28,6 +20,11 @@ abstract class Account {
     public HashMap<Currency, Integer> getWallet() {
         return wallet;
     }
+
+    public Account(String clientName) {
+        this.setClientName(clientName);
+    }
+}
 
 //    @Override
 //    public String toString() {
