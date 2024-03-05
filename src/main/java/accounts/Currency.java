@@ -14,11 +14,10 @@ public enum Currency {
         this.name = name;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Currency{");
-        sb.append("name='").append(name).append('\'');
-        sb.append('}');
-        return sb.toString();
-    }
+//    @Override
+//    public String toString() {
+//        return "Currency{" +
+//                "name='" + name + '\'' + this
+//                '}';
+//    }
 }
