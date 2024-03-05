@@ -59,4 +59,18 @@ class AccountTest {
         acc.undo();
         Assertions.assertEquals(oldName,acc.getClientName());
     }
+    @org.junit.jupiter.api.Test
+    void save(){
+        String name="Иван Петров";
+        int num=333;
+        Account acc=new Account(name);
+        acc.setWallet(Currency.RUB,num);
+        Loadable qs= acc.save();
+        acc.setClientName("Василий Иванов");
+        acc.setWallet(Currency.RUB,555);
+        qs.load();
+        Assertions.assertEquals(name,acc.getClientName());
+        if(acc.getWallet().get(Currency.RUB) != num)
+            throw new RuntimeException("test save() broken");
+    }
 }

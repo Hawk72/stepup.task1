@@ -7,10 +7,30 @@ import java.util.HashMap;
 public class Account {
 
     private String clientName;
-    private int number;
-    private Currency currency;
+    //private int number;
+    //private Currency currency;
     private HashMap<Currency, Integer> wallet;
     private Deque<Command> commands=new ArrayDeque<>();
+
+    public Loadable save(){
+        return new Snapshot();
+    }
+    private class Snapshot implements Loadable
+    {
+        private String clientName;
+        private HashMap<Currency, Integer> wallet;
+
+        public Snapshot ()
+        {
+            this.clientName = Account.this.clientName;
+            this.wallet = new HashMap<>(Account.this.wallet);
+        }
+        @Override
+        public void load() {
+            Account.this.clientName = this.clientName;
+            Account.this.wallet = new HashMap<>(this.wallet);
+        }
+    }
 
     public String getClientName() {
         return clientName;
